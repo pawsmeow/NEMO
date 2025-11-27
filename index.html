@@ -15,8 +15,7 @@
 
     <style>
         :root {
-            /* Anime Palette */
-            --bg-deep: #1a0b2e; /* Глубокий фиолетовый */
+            --bg-deep: #1a0b2e; 
             --anime-pink: #ff00cc;
             --anime-cyan: #00f7ff;
             --anime-yellow: #ffdd00;
@@ -40,15 +39,12 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
-            /* Anime speed lines pattern background */
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(26, 11, 46, 0.8) 20%, transparent 100%),
                 repeating-linear-gradient(45deg, rgba(255, 0, 204, 0.05) 0px, rgba(255, 0, 204, 0.05) 2px, transparent 2px, transparent 10px),
                 repeating-linear-gradient(-45deg, rgba(0, 247, 255, 0.05) 0px, rgba(0, 247, 255, 0.05) 2px, transparent 2px, transparent 10px);
             background-attachment: fixed;
         }
-
-        /* Floating particles */
         .particle {
             position: fixed;
             width: 5px;
@@ -61,7 +57,6 @@
         .p-pink { background: var(--anime-pink); }
         .p-yellow { background: var(--anime-yellow); width: 8px; height: 8px; }
 
-        /* --- Container --- */
         .container {
             width: 100%;
             max-width: 480px;
@@ -72,8 +67,6 @@
             z-index: 1;
             position: relative;
         }
-
-        /* Decorative Japanese Text BG */
         .bg-deco-text {
             position: absolute;
             top: 20px;
@@ -124,7 +117,7 @@
             color: white;
             overflow: hidden;
             border: 3px solid var(--anime-pink);
-            transform: rotate(-5deg); /* Counter skew */
+            transform: rotate(-5deg); 
             z-index: 1;
         }
         
@@ -139,7 +132,6 @@
             font-size: 3rem;
             letter-spacing: 2px;
             color: var(--anime-yellow);
-            /* Comic text effect: Outline and Hard Shadow */
             text-shadow: 
                 -2px -2px 0 var(--anime-pink),  
                  2px -2px 0 var(--anime-pink),
@@ -159,10 +151,9 @@
             background: rgba(0,0,0,0.3);
             display: inline-block;
             padding: 5px 15px;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); /* Slanted manga text box */
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); 
         }
 
-        /* --- Stats (Manga Panels) --- */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -172,16 +163,13 @@
         .anime-card {
             background: var(--panel-bg);
             border: 3px solid var(--anime-cyan);
-            /* Hard comic shadow */
             box-shadow: 6px 6px 0px rgba(0, 247, 255, 0.3);
             padding: 15px;
             position: relative;
             overflow: hidden;
-            /* Slight tilt for dynamic feel */
             transform: skewX(-3deg);
         }
 
-        /* Fix inner content tilt */
         .anime-card > * {
             transform: skewX(3deg);
         }
@@ -232,7 +220,6 @@
             font-weight: 600;
         }
 
-        /* --- Action Buttons --- */
         .links-section {
             display: flex;
             flex-direction: column;
@@ -253,11 +240,8 @@
             font-weight: 700;
             overflow: hidden;
             transition: all 0.2s ease-out;
-            /* Aggressive angled cut */
             clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
         }
-
-        /* Alternate color for second button */
         .action-btn.alt {
             border-color: var(--anime-pink);
         }
@@ -266,7 +250,7 @@
             transform: translate(-4px, -4px);
             background: var(--anime-cyan);
             color: var(--bg-deep);
-            box-shadow: 6px 6px 0px var(--anime-pink); /* Hard shadow swap on hover */
+            box-shadow: 6px 6px 0px var(--anime-pink);
             border-color: var(--anime-pink);
         }
         
@@ -276,7 +260,6 @@
              border-color: var(--anime-cyan);
         }
 
-        /* Flash effect on hover */
         .action-btn::after {
             content: '';
             position: absolute;
@@ -303,7 +286,6 @@
             50% { transform: scale(1.3); }
         }
 
-        /* --- Donate "Treasure" Card --- */
         .donate-card {
             background: repeating-linear-gradient(45deg, var(--panel-bg), var(--panel-bg) 10px, #2f1550 10px, #2f1550 20px);
             border: 4px solid var(--anime-yellow);
@@ -319,7 +301,7 @@
              transform: skewX(-2deg) scale(1.02);
         }
 
-        .donate-card > * { transform: skewX(2deg); } /* Fix inner text */
+        .donate-card > * { transform: skewX(2deg); }
 
         .donate-title {
             font-family: 'Bangers', Impact, 'Comic Sans MS', cursive;
@@ -346,7 +328,6 @@
             text-transform: uppercase;
         }
 
-        /* --- Footer --- */
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -379,10 +360,8 @@
             transform: scaleX(1);
         }
 
-        /* --- GSAP Initial State --- */
         .gsap-elem {
             opacity: 0;
-            /* No visibility: hidden here to allow elastic bounce to work properly from start */
         }
 
     </style>
