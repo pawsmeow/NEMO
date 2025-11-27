@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nemo/ Nurhat - MLBB Anime Style</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            /* Anime Palette */
+            --bg-deep: #1a0b2e; /* Глубокий фиолетовый */
+            --anime-pink: #ff00cc;
+            --anime-cyan: #00f7ff;
+            --anime-yellow: #ffdd00;
+            --panel-bg: #251240;
+            --text-main: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            /* Anime speed lines pattern background */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(26, 11, 46, 0.8) 20%, transparent 100%),
+                repeating-linear-gradient(45deg, rgba(255, 0, 204, 0.05) 0px, rgba(255, 0, 204, 0.05) 2px, transparent 2px, transparent 10px),
+                repeating-linear-gradient(-45deg, rgba(0, 247, 255, 0.05) 0px, rgba(0, 247, 255, 0.05) 2px, transparent 2px, transparent 10px);
+            background-attachment: fixed;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: var(--anime-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .p-pink { background: var(--anime-pink); }
+        .p-yellow { background: var(--anime-yellow); width: 8px; height: 8px; }
+
+        /* --- Container --- */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Decorative Japanese Text BG */
+        .bg-deco-text {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Bangers', cursive;
+            font-size: 5rem;
+            opacity: 0.05;
+            color: var(--anime-pink);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px;
+        }
+
+        .avatar-border {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 4px solid var(--anime-cyan);
+            box-shadow: 0 0 15px var(--anime-cyan), inset 0 0 10px var(--anime-cyan);
+            transform: rotate(5deg); /* Anime skew */
+            background: var(--panel-bg);
+            z-index: 0;
+        }
+
+        .avatar {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            overflow: hidden;
+            border: 3px solid var(--anime-pink);
+            transform: rotate(-5deg); /* Counter skew */
+            z-index: 1;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive; /* Comic Font */
+            font-size: 3rem;
+            letter-spacing: 2px;
+            color: var(--anime-yellow);
+            /* Comic text effect: Outline and Hard Shadow */
+            text-shadow: 
+                -2px -2px 0 var(--anime-pink),  
+                 2px -2px 0 var(--anime-pink),
+                -2px  2px 0 var(--anime-pink),
+                 2px  2px 0 var(--anime-pink),
+                 4px 4px 0px #000;
+            margin-bottom: 5px;
+            transform: skewX(-5deg);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--anime-cyan);
+            background: rgba(0,0,0,0.3);
+            display: inline-block;
+            padding: 5px 15px;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); /* Slanted manga text box */
+        }
+
+        /* --- Stats (Manga Panels) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .anime-card {
+            background: var(--panel-bg);
+            border: 3px solid var(--anime-cyan);
+            /* Hard comic shadow */
+            box-shadow: 6px 6px 0px rgba(0, 247, 255, 0.3);
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            /* Slight tilt for dynamic feel */
+            transform: skewX(-3deg);
+        }
+
+        /* Fix inner content tilt */
+        .anime-card > * {
+            transform: skewX(3deg);
+        }
+
+        .anime-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.03) 10px,
+                rgba(255, 255, 255, 0.03) 20px
+            );
+            pointer-events: none;
+        }
+
+        .stat-label {
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            color: var(--anime-pink);
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-value.gold {
+            color: var(--anime-yellow);
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 0px var(--anime-pink);
+        }
+
+        .bio-card {
+            grid-column: span 2;
+            border-color: var(--anime-pink);
+            box-shadow: 6px 6px 0px rgba(255, 0, 204, 0.3);
+        }
+        
+        .bio-text {
+            font-size: 1.05rem;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        /* --- Action Buttons --- */
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .action-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            text-decoration: none;
+            color: var(--text-main);
+            background: linear-gradient(90deg, var(--panel-bg), #3a1e5e);
+            border: 3px solid var(--anime-cyan);
+            font-size: 1.2rem;
+            font-weight: 700;
+            overflow: hidden;
+            transition: all 0.2s ease-out;
+            /* Aggressive angled cut */
+            clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
+        }
+
+        /* Alternate color for second button */
+        .action-btn.alt {
+            border-color: var(--anime-pink);
+        }
+
+        .action-btn:hover {
+            transform: translate(-4px, -4px);
+            background: var(--anime-cyan);
+            color: var(--bg-deep);
+            box-shadow: 6px 6px 0px var(--anime-pink); /* Hard shadow swap on hover */
+            border-color: var(--anime-pink);
+        }
+        
+        .action-btn.alt:hover {
+            background: var(--anime-pink);
+             box-shadow: 6px 6px 0px var(--anime-cyan);
+             border-color: var(--anime-cyan);
+        }
+
+        /* Flash effect on hover */
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: 0.4s;
+            transform: skewX(-20deg);
+        }
+
+        .action-btn:hover::after {
+            left: 100%;
+        }
+
+        .btn-icon {
+            font-size: 1.4rem;
+            margin-right: 15px;
+        }
+
+        .action-btn:hover .btn-icon {
+            animation: iconPop 0.3s ease-out forwards;
+        }
+        @keyframes iconPop {
+            50% { transform: scale(1.3); }
+        }
+
+        /* --- Donate "Treasure" Card --- */
+        .donate-card {
+            background: repeating-linear-gradient(45deg, var(--panel-bg), var(--panel-bg) 10px, #2f1550 10px, #2f1550 20px);
+            border: 4px solid var(--anime-yellow);
+            box-shadow: 6px 6px 0px var(--anime-yellow), 0 0 20px var(--anime-yellow);
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transform: skewX(-2deg);
+            transition: transform 0.2s;
+        }
+        .donate-card:hover {
+             transform: skewX(-2deg) scale(1.02);
+        }
+
+        .donate-card > * { transform: skewX(2deg); } /* Fix inner text */
+
+        .donate-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--anime-yellow);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .card-number {
+            font-family: 'Bangers', cursive;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: white;
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 5px;
+        }
+
+        .copy-hint {
+            font-weight: 700;
+            color: var(--anime-cyan);
+            text-transform: uppercase;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            padding-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: var(--anime-pink);
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .footer a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--anime-cyan);
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .footer a:hover::after {
+            visibility: visible;
+            transform: scaleX(1);
+        }
+
+        /* --- GSAP Initial State --- */
+        .gsap-elem {
+            opacity: 0;
+            /* No visibility: hidden here to allow elastic bounce to work properly from start */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-deco-text">モバイルレジェンド</div>
+
+    <div class="particle p-cyan" style="top: 10%; left: 20%;"></div>
+    <div class="particle p-pink" style="top: 30%; left: 80%;"></div>
+    <div class="particle p-yellow" style="top: 50%; left: 10%;"></div>
+    <div class="particle p-cyan" style="top: 70%; left: 90%;"></div>
+    <div class="particle p-pink" style="top: 85%; left: 30%;"></div>
+
+    <div class="container">
+        <header class="header gsap-elem">
+            <div class="avatar-container">
+                <div class="avatar-border"></div>
+                <div class="avatar">
+                    <img src="avatar.jpg" alt="Nemo Avatar">
+                </div>
+            </div>
+            <h1>Nemo/ Nurhat</h1>
+            <div class="subtitle">
+                <i class="fas fa-bolt"></i> Streamer & MLBB Player
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="anime-card gsap-elem">
+                <div class="stat-label">РАНГ (ЗВЕЗДЫ)</div>
+                <div class="stat-value gold">
+                    <i class="fas fa-star"></i> 478
+                </div>
+            </div>
+            <div class="anime-card gsap-elem">
+                <div class="stat-label">РОЛЬ</div>
+                <div class="stat-value" style="color: var(--anime-cyan);">GOLD LANER</div>
+            </div>
+            <div class="anime-card bio-card gsap-elem">
+                <div class="stat-label">ДОСЬЕ ИГРОКА</div>
+                <div class="bio-text">
+                    24 года. Уровень игры: <span style="color:var(--anime-yellow)">EXTREME</span>. Жду твоей поддержки, чтобы пробить небеса! ⚡️
+                </div>
+            </div>
+        </div>
+
+        <div class="links-section">
+            <a href="https://t.me/shakashakanemo" target="_blank" class="action-btn gsap-elem">
+                <div style="display: flex; align-items: center;">
+                    <i class="fab fa-telegram-plane btn-icon"></i>
+                    <span>TELEGRAM (ЛС)</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <a href="https://t.me/nemokamuika" target="_blank" class="action-btn alt gsap-elem">
+                <div style="display: flex; align-items: center;">
+                    <i class="fas fa-bullhorn btn-icon"></i>
+                    <span>TELEGRAM КАНАЛ</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="donate-card gsap-elem" id="donateBlock">
+            <div class="donate-title"><i class="fas fa-gem"></i> Поддержать (Kaspi/Card)</div>
+            <div class="card-number" id="cardText">4400 4303 7552 3252</div>
+            <div class="copy-hint" id="copyHint">TAP TO COPY!</div>
+        </div>
+
+        <footer class="footer gsap-elem">
+            <a href="https://t.me/LUNOX_ML" target="_blank">
+                DESIGN BY LUNOX_ML | ЗАКАЗАТЬ ТАПЛИНК
+            </a>
+        </footer>
+    </div>
+
+<script>
+        const donateBlock = document.getElementById('donateBlock');
+        const cardText = document.getElementById('cardText');
+        const copyHint = document.getElementById('copyHint');
+        const originalNumber = cardText.innerText;
+        let isCopied = false;
+
+        const ANIME_YELLOW = "#ffdd00";
+        const ANIME_CYAN = "#00f7ff";
+        const SUCCESS_GREEN = "#4ade80"; 
+
+        donateBlock.addEventListener('click', () => {
+            if(isCopied) return;
+            
+            navigator.clipboard.writeText(originalNumber).then(() => {
+                isCopied = true;
+                copyHint.innerText = "СКОПИРОВАНО! NANI?! ✅";
+                copyHint.style.color = SUCCESS_GREEN; 
+                donateBlock.style.borderColor = SUCCESS_GREEN;
+                
+                gsap.fromTo(donateBlock, {x: -5}, {x: 5, duration: 0.05, repeat: 5, yoyo: true});
+
+                setTimeout(() => {
+                    copyHint.innerText = "TAP TO COPY!";
+                    copyHint.style.color = ANIME_CYAN;
+                    donateBlock.style.borderColor = ANIME_YELLOW;
+                    isCopied = false;
+                }, 2000);
+            }).catch(err => console.error('Error:', err));
+        });
+
+        document.addEventListener("DOMContentLoaded", (event) => {
+            
+            gsap.to(".gsap-elem", {
+                duration: 1.2,
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                stagger: 0.15,
+
+                ease: "elastic.out(1, 0.6)", 
+                from: { 
+                    opacity: 0, 
+                    scale: 0.8,
+                    y: 100
+                }
+            });
+
+            gsap.to(".particle", {
+                y: "random(-100, 100)",
+                x: "random(-50, 50)",
+                rotation: "random(0, 360)",
+                duration: "random(5, 10)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+            gsap.to(".avatar-border", {
+                rotation: -5,
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+             gsap.to(".avatar", {
+                rotation: 5,
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        });
+    </script>
+</body>
+</html>
